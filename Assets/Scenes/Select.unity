@@ -399,7 +399,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explain_text: {fileID: 0}
   canvas: {fileID: 1344855441}
-  choiceBgm: {fileID: 8300000, guid: ef14a8cc99c39f74b871089869288b5d, type: 3}
+  choiceBgm: {fileID: 8300000, guid: fae30d167204c614cbdc9e9d09a56453, type: 3}
 --- !u!4 &1718486449
 Transform:
   m_ObjectHideFlags: 0

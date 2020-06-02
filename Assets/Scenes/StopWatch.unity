@@ -1090,7 +1090,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -343, y: 120}
+  m_AnchoredPosition: {x: -372.5, y: 120}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &798230219
@@ -1641,6 +1641,8 @@ MonoBehaviour:
   explain: {fileID: 608584222}
   result: {fileID: 798230220}
   botton_text: {fileID: 698527527}
+  choiceBgm2: {fileID: 8300000, guid: fae30d167204c614cbdc9e9d09a56453, type: 3}
+  choicekaraburi: {fileID: 8300000, guid: efd28d80e4b3f234498adbb205cb0c06, type: 3}
 --- !u!4 &1411607393
 Transform:
   m_ObjectHideFlags: 0

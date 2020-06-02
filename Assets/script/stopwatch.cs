@@ -16,6 +16,8 @@ public class stopwatch : MonoBehaviour
     public Text result;
     public Text botton_text;
     private bool botton_bool = false;
+    public AudioClip choiceBgm2;
+    public AudioClip choicekaraburi;
     // Start is called before the first frame update
     void Start()
     {
@@ -49,9 +51,11 @@ public class stopwatch : MonoBehaviour
         Debug.Log("stop");
         Debug.Log(botton_bool);
         if (botton_bool == true){
+            GameObject audio_res = (GameObject)Resources.Load("MusicManager");
             flag = false;
             if ((10 - successtime) < time && (10 + successtime) > time)
             {
+                GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>().PlayOneShot(choiceBgm2);
                 if (mors == "meet")
                 {
                     result.text = "ヒット！";
@@ -71,6 +75,7 @@ public class stopwatch : MonoBehaviour
             }
             else
             {
+                GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>().PlayOneShot(choicekaraburi);
                 result.text = "残念、、三振、、、";
             }
         }
