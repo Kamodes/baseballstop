@@ -6,16 +6,25 @@ using UnityEngine.UI;
 
 public class select : MonoBehaviour
 {
-    public GameObject meet;
-    public GameObject strong;
-    public GameObject superstrong;
     private string select_swing;
     public Text explain_text;
+    public GameObject canvas;
     float timelimit = 0.0f;
+    private GameObject meet;
+    private GameObject strong;
+    private GameObject superstrong;
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameObject meet_res = (GameObject)Resources.Load("meet");
+        GameObject strong_res = (GameObject)Resources.Load("strongswing");
+        GameObject superstrong_res = (GameObject)Resources.Load("superstrong");
+        meet = (GameObject)Instantiate(meet_res, meet_res.transform.position, Quaternion.identity);
+        strong = (GameObject)Instantiate(strong_res, strong_res.transform.position, Quaternion.identity);
+        superstrong = (GameObject)Instantiate(superstrong_res, superstrong_res.transform.position, Quaternion.identity);
+        meet.transform.SetParent(canvas.transform, false);
+        strong.transform.SetParent(canvas.transform, false);
+        superstrong.transform.SetParent(canvas.transform, false);
     }
 
     // Update is called once per frame
@@ -28,7 +37,7 @@ public class select : MonoBehaviour
     {
         float uppertime = 10.0f + timelimit;
         float undertime = 10.0f - timelimit;
-        explain_text.text = "You Select" + select_swing + "\n" 
+        explain_text.text = "You Select " + select_swing + "\n" 
         + undertime + "から" + uppertime + "までにSTOPしましょう！";
 
     }
@@ -36,9 +45,9 @@ public class select : MonoBehaviour
     public void Clickmeet()
     {
         timelimit = 0.5f;
-        Destroy(meet.gameObject);
-        Destroy(strong.gameObject);
-        Destroy(superstrong.gameObject);
+        DestroyImmediate(meet.gameObject, true);
+        DestroyImmediate(strong.gameObject, true);
+        DestroyImmediate(superstrong.gameObject, true);
         select_swing = "meet";
         Explain();
     }
@@ -46,9 +55,9 @@ public class select : MonoBehaviour
     public void Clickstrong()
     {
         timelimit = 0.3f;
-        Destroy(meet.gameObject);
-        Destroy(strong.gameObject);
-        Destroy(superstrong.gameObject);
+        DestroyImmediate(meet.gameObject, true);
+        DestroyImmediate(strong.gameObject, true);
+        DestroyImmediate(superstrong.gameObject, true);
         select_swing = "strong";
         Explain();     
     }
@@ -56,9 +65,9 @@ public class select : MonoBehaviour
     public void Clicksuperstrong()
     {
         timelimit = 0.1f;
-        Destroy(meet.gameObject);
-        Destroy(strong.gameObject);
-        Destroy(superstrong.gameObject);
+        DestroyImmediate(meet.gameObject, true);
+        DestroyImmediate(strong.gameObject, true);
+        DestroyImmediate(superstrong.gameObject, true);
         select_swing = "superstrong";
         Explain();
     }
