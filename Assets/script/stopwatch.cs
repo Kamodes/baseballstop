@@ -26,9 +26,17 @@ public class stopwatch : MonoBehaviour
     public GameObject stopbotton_obj;
     public GameObject bases;
     public GameObject outparent;
+    public GameObject ball;
+    public GameObject dest;
+    public GameObject hitdest;
+    public GameObject hitdest_right;
     private static bool[] runner = new bool[3] { false, false, false }; 
     private static int outcount = 0;
     private float limit_succesTime = 5.0f;
+    private Vector3 ballposition;
+    private Vector3 destposition;
+    private float desttime = 0.5f;
+    private bool hit = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,17 +44,19 @@ public class stopwatch : MonoBehaviour
         limit_succesTime = random_time;
         if (mors == "meet")
         {
-            explain.text = (limit_succesTime - successtime).ToString() + "から" + (limit_succesTime + successtime).ToString() + "までにふれば\nヒット！";
+            explain.text = limit_succesTime.ToString() + "ちょうどを狙え！\n" + (limit_succesTime - successtime).ToString() + "から" + (limit_succesTime + successtime).ToString() + "までにふれば\nヒット！";
         }else if(mors == "strong")
         {
-            explain.text = (limit_succesTime - successtime).ToString() + "から" + (limit_succesTime + successtime).ToString() + "までにふれば\n２塁打！";
+            explain.text = limit_succesTime.ToString() + "ちょうどを狙え！\n" + (limit_succesTime - successtime).ToString() + "から" + (limit_succesTime + successtime).ToString() + "までにふれば\n２塁打！";
         }else if(mors == "superstrong")
         {
-            explain.text = (limit_succesTime - successtime).ToString() + "から" + (limit_succesTime + successtime).ToString() + "までにふれば\nホームラン！";
+            explain.text = limit_succesTime.ToString() + "ちょうどを狙え！\n" + (limit_succesTime - successtime).ToString() + "から" + (limit_succesTime + successtime).ToString() + "までにふれば\nホームラン！";
         }else
         {
             explain.text = "エラーです。店員をよんでください。";
         }
+        ballposition = ball.transform.position;
+        destposition = dest.transform.position;
     }
 
     // Update is called once per frame
@@ -56,11 +66,11 @@ public class stopwatch : MonoBehaviour
         {
             if (runner[i])
             {
-                bases.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color = Color.magenta;
+                bases.transform.GetChild(i).gameObject.GetComponent<Image>().color = Color.magenta;
             }
             else
             {
-                bases.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color = Color.gray;
+                bases.transform.GetChild(i).gameObject.GetComponent<Image>().color = Color.gray;
             }
         }
 
@@ -68,11 +78,11 @@ public class stopwatch : MonoBehaviour
         {
             if (outcount >= 1 + i)
             {
-                outparent.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color = Color.red;
+                outparent.transform.GetChild(i).gameObject.GetComponent<Image>().color = Color.red;
             }
             else
             {
-                outparent.transform.GetChild(i).gameObject.GetComponent<Renderer>().material.color = Color.black;
+                outparent.transform.GetChild(i).gameObject.GetComponent<Image>().color = Color.black;
             }
         }
 
@@ -81,6 +91,11 @@ public class stopwatch : MonoBehaviour
             time += Time.deltaTime;
         }
         timelimit_text.text = time.ToString();
+
+        if((time > limit_succesTime - desttime) && (hit == false))
+        {
+            ball.transform.position = ball.transform.position + (destposition - ballposition) * Time.deltaTime / desttime;
+        }
     }
 
     public void stopbotton()
@@ -104,6 +119,15 @@ public class stopwatch : MonoBehaviour
                     runner[2] = runner[1];
                     runner[1] = runner[0];
                     runner[0] = true;
+                    if((time - limit_succesTime + successtime) < successtime)
+                    {
+                        ball.GetComponent<Rigidbody>().velocity = (hitdest.transform.position - destposition) - new Vector3(0, 15, 15);
+                    }
+                    else
+                    {
+                        ball.GetComponent<Rigidbody>().velocity = (hitdest_right.transform.position - destposition) - new Vector3(0, 15, 15);
+                    }
+                    
                 }
                 else if (mors == "strong")
                 {
@@ -117,6 +141,14 @@ public class stopwatch : MonoBehaviour
                     runner[2] = runner[0];
                     runner[1] = true;
                     runner[0] = false;
+                    if ((time - limit_succesTime + successtime) < successtime)
+                    {
+                        ball.GetComponent<Rigidbody>().velocity = (hitdest.transform.position - destposition) - new Vector3(0, 10, 15);
+                    }
+                    else
+                    {
+                        ball.GetComponent<Rigidbody>().velocity = (hitdest_right.transform.position - destposition) - new Vector3(0, 10, 15);
+                    }
                 }
                 else if (mors == "superstrong")
                 {
@@ -124,14 +156,28 @@ public class stopwatch : MonoBehaviour
                     int count = 0;
                     for(int i = 0; i < 3; i++)
                     {
-                        if (runner[i]) count++;
+                        if (runner[i])
+                        {
+                            count++;
+                            runner[i] = false;
+                        }
                     }
                     score += count + 1;
+                    if ((time - limit_succesTime + successtime) < successtime)
+                    {
+                        ball.GetComponent<Rigidbody>().velocity = (hitdest.transform.position - destposition);
+                    }
+                    else
+                    {
+                        ball.GetComponent<Rigidbody>().velocity = (hitdest_right.transform.position - destposition);
+                    }
                 }
                 else
                 {
-                    result.text = "エラーです。店員をよんでください。";
+                    result.text = "エラーです。\n店員をよんでください。";
                 }
+                ball.GetComponent<Rigidbody>().useGravity = true;
+                hit = true;
             }
             else
             {
