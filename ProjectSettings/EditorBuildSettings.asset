@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StopWatch.unity
     guid: 4a1ba42311f2f8e4781598abc38f64fb
+  - enabled: 1
+    path: Assets/Scenes/Result.unity
+    guid: 0d9aaae6f7257c846b76681f4b02ce2e
   m_configObjects: {}

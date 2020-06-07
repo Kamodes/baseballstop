@@ -43,9 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8c8177e367c9d0499ea69e3374dac0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meet: {fileID: 718947187737933440, guid: dcfac2139ed019847ba701672d0101d6, type: 3}
-  strong: {fileID: 6905423163846701669, guid: 049255fd611620349becf662c9d3c4dc, type: 3}
-  superstrong: {fileID: 1073872223903798183, guid: 892f2234c6b100d49834b48c7306dd6d,
-    type: 3}
   explain_text: {fileID: 1666116893185098158, guid: 662c346211754114897f51379ba46182,
     type: 3}
+  canvas: {fileID: 0}
+  choiceBgm: {fileID: 8300000, guid: ef14a8cc99c39f74b871089869288b5d, type: 3}

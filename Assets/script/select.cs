@@ -16,6 +16,9 @@ public class select : MonoBehaviour
     private GameObject superstrong;
     public AudioClip choiceBgm;
     private AudioSource audioSource;
+    private int random;
+    public static float score_select = 0;//staticは一つしかないから。
+    List<GameObject> botton_list = new List<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -23,12 +26,35 @@ public class select : MonoBehaviour
         GameObject meet_res = (GameObject)Resources.Load("meet");
         GameObject strong_res = (GameObject)Resources.Load("strongswing");
         GameObject superstrong_res = (GameObject)Resources.Load("superstrong");
-        meet = (GameObject)Instantiate(meet_res, meet_res.transform.position, Quaternion.identity);
-        strong = (GameObject)Instantiate(strong_res, strong_res.transform.position, Quaternion.identity);
-        superstrong = (GameObject)Instantiate(superstrong_res, superstrong_res.transform.position, Quaternion.identity);
-        meet.transform.SetParent(canvas.transform, false);
-        strong.transform.SetParent(canvas.transform, false);
-        superstrong.transform.SetParent(canvas.transform, false);
+        GameObject[] ob_list = new GameObject[3] { meet_res, strong_res, superstrong_res};
+
+        
+
+        for (int i = 0; i < 3; i++)
+        {
+            random = Random.Range(1, 4);
+            switch(random)
+            {
+                case 1:
+                    meet = (GameObject)Instantiate(meet_res, ob_list[i].transform.position, Quaternion.identity);
+                    meet.transform.SetParent(canvas.transform, false);
+                    botton_list.Add(meet);
+                    break;
+                case 2:
+                    strong = (GameObject)Instantiate(strong_res, ob_list[i].transform.position, Quaternion.identity);
+                    strong.transform.SetParent(canvas.transform, false);
+                    botton_list.Add(strong);
+                    break;
+                case 3:
+                    superstrong = (GameObject)Instantiate(superstrong_res, ob_list[i].transform.position, Quaternion.identity);
+                    superstrong.transform.SetParent(canvas.transform, false);
+                    botton_list.Add(superstrong);
+                    break;
+                default:
+                    break;
+            }
+        }
+       
     }
 
     // Update is called once per frame
@@ -49,18 +75,13 @@ public class select : MonoBehaviour
     public void Clickmeet()
     {
         GameObject audio_res = (GameObject)Resources.Load("MusicManager");
-        GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>().PlayOneShot(choiceBgm);
-       // audioSource.PlayOneShot(choiceBgm);
-        timelimit = 0.5f;
-        //GameObject.Destroy(meet.gameObject);
-        //GameObject.Destroy(strong.gameObject);
-        //GameObject.Destroy(superstrong.gameObject);
+        audioSource = GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>();
+        audioSource.PlayOneShot(choiceBgm);
+        timelimit = 0.3f;
         select_swing = "meet";
         //Explain();
         //Debug.Log("meet");//new!
-        SceneManager.LoadScene("stopwatch");
-
-
+        Invoke("Scene_Load", 0.3f);
     }
 
     public void Clickstrong()
@@ -68,13 +89,10 @@ public class select : MonoBehaviour
         GameObject audio_res = (GameObject)Resources.Load("MusicManager");
         audioSource = GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>();
         audioSource.PlayOneShot(choiceBgm);
-        timelimit = 0.3f;
-        //GameObject.Destroy(meet.gameObject);
-        //GameObject.Destroy(strong.gameObject);
-        //GameObject.Destroy(superstrong.gameObject);
+        timelimit = 0.1f;
         select_swing = "strong";
         // Explain();     
-        SceneManager.LoadScene("stopwatch");
+        Invoke("Scene_Load", 0.3f);
     }
 
     public void Clicksuperstrong()
@@ -82,12 +100,14 @@ public class select : MonoBehaviour
         GameObject audio_res = (GameObject)Resources.Load("MusicManager");
         audioSource = GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>();
         audioSource.PlayOneShot(choiceBgm);
-        timelimit = 0.1f;
-        //GameObject.Destroy(meet.gameObject);
-        //GameObject.Destroy(strong.gameObject);
-        //GameObject.Destroy(superstrong.gameObject);
+        timelimit = 0.05f;
         select_swing = "superstrong";
         // Explain();
+        Invoke("Scene_Load", 0.3f);
+    }
+
+    public void Scene_Load()
+    {
         SceneManager.LoadScene("stopwatch");
     }
 }
