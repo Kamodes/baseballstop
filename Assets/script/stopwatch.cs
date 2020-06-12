@@ -37,6 +37,7 @@ public class stopwatch : MonoBehaviour
     private Vector3 destposition;
     private float desttime = 0.5f;
     private bool hit = false;
+    private bool mode_stopwatch = ModeManager.mode;
     // Start is called before the first frame update
     void Start()
     {
@@ -90,7 +91,16 @@ public class stopwatch : MonoBehaviour
         {
             time += Time.deltaTime;
         }
-        timelimit_text.text = time.ToString();
+
+        if (mode_stopwatch)
+        {
+            timelimit_text.text = time.ToString();
+        }
+        else
+        {
+            timelimit_text.text = "HardMode!!!\n得点２倍!!!";
+        }
+            
 
         if((time > limit_succesTime - desttime) && (hit == false))
         {
@@ -189,7 +199,16 @@ public class stopwatch : MonoBehaviour
                     Invoke("LoadResult", 1.0f);
                 }
             }
-            select.score_select += score;
+
+            if (mode_stopwatch)
+            {
+                select.score_select += score;
+            }
+            else
+            {
+                select.score_select += 2 * score;
+            }
+            
             score_text.text = "君のスコアは" + select.score_select.ToString();
             GameObject next_res = (GameObject)Resources.Load("Next");
             next = (GameObject)Instantiate(next_res, next_res.transform.position, Quaternion.identity);
