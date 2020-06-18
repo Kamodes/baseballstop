@@ -77,7 +77,7 @@ public class select : MonoBehaviour
         GameObject audio_res = (GameObject)Resources.Load("MusicManager");
         audioSource = GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>();
         audioSource.PlayOneShot(choiceBgm);
-        timelimit = 0.3f;
+        timelimit = 0.1f;
         select_swing = "meet";
         //Explain();
         //Debug.Log("meet");//new!
@@ -89,7 +89,7 @@ public class select : MonoBehaviour
         GameObject audio_res = (GameObject)Resources.Load("MusicManager");
         audioSource = GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>();
         audioSource.PlayOneShot(choiceBgm);
-        timelimit = 0.1f;
+        timelimit = 0.07f;
         select_swing = "strong";
         // Explain();     
         Invoke("Scene_Load", 0.3f);
@@ -100,7 +100,7 @@ public class select : MonoBehaviour
         GameObject audio_res = (GameObject)Resources.Load("MusicManager");
         audioSource = GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>();
         audioSource.PlayOneShot(choiceBgm);
-        timelimit = 0.05f;
+        timelimit = 0.03f;
         select_swing = "superstrong";
         // Explain();
         Invoke("Scene_Load", 0.3f);

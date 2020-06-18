@@ -17,9 +17,15 @@ public class stopwatch : MonoBehaviour
     public Text result;
     public Text botton_text;
     public Text score_text;
+    public Text start_text;
+    public Text carsol_text1;
+    public Text carsol_text2;
     private bool botton_bool = false;
     public AudioClip choiceBgm2;
     public AudioClip choicekaraburi;
+    public AudioClip rightHome;
+    public AudioClip monkuHome;
+    public AudioClip utta;
     private float score;
     private GameObject next;
     public GameObject canvas;
@@ -38,10 +44,12 @@ public class stopwatch : MonoBehaviour
     private float desttime = 0.5f;
     private bool hit = false;
     private bool mode_stopwatch = ModeManager.mode;
+    private bool carsol = false;
+    private Vector3 carsolposition;
     // Start is called before the first frame update
     void Start()
     {
-        int random_time = Random.Range(3, 10);
+        int random_time = Random.Range(3, 7);
         limit_succesTime = random_time;
         if (mors == "meet")
         {
@@ -58,6 +66,9 @@ public class stopwatch : MonoBehaviour
         }
         ballposition = ball.transform.position;
         destposition = dest.transform.position;
+        carsolposition = new Vector3(0.1f, 0.8f, -8.0f);
+        GameObject carsol_res = (GameObject)Resources.Load("carsol");
+        GameObject.Instantiate(carsol_res, carsolposition, Quaternion.identity);
     }
 
     // Update is called once per frame
@@ -100,105 +111,120 @@ public class stopwatch : MonoBehaviour
         {
             timelimit_text.text = "HardMode!!!\n得点２倍!!!";
         }
-            
 
         if((time > limit_succesTime - desttime) && (hit == false))
         {
             ball.transform.position = ball.transform.position + (destposition - ballposition) * Time.deltaTime / desttime;
+        }
+
+        if(time > limit_succesTime && time <= (limit_succesTime + Time.deltaTime))
+        {
+            Debug.Log(ball.transform.position);
         }
     }
 
     public void stopbotton()
     {
         score = 0;
-        Debug.Log("stop");
-        Debug.Log(botton_bool);
         if (botton_bool == true){
             GameObject audio_res = (GameObject)Resources.Load("MusicManager");
             flag = false;
-            if ((limit_succesTime - successtime) < time && (limit_succesTime + successtime) > time)
+            start_text.text = "";
+            if (carsol == false)
             {
-                GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>().PlayOneShot(choiceBgm2);
-                if (mors == "meet")
+                if ((limit_succesTime - successtime) < time && (limit_succesTime + successtime) > time)
                 {
-                    result.text = "ヒット！";
-                    if (runner[2])
+                    GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>().PlayOneShot(choiceBgm2);
+                    this.gameObject.GetComponent<AudioSource>().volume = 1.0f;
+                    if (mors == "meet")
                     {
-                        score += 1;
-                    }
-                    runner[2] = runner[1];
-                    runner[1] = runner[0];
-                    runner[0] = true;
-                    if((time - limit_succesTime + successtime) < successtime)
-                    {
-                        ball.GetComponent<Rigidbody>().velocity = (hitdest.transform.position - destposition) - new Vector3(0, 15, 15);
-                    }
-                    else
-                    {
-                        ball.GetComponent<Rigidbody>().velocity = (hitdest_right.transform.position - destposition) - new Vector3(0, 15, 15);
-                    }
-                    
-                }
-                else if (mors == "strong")
-                {
-                    result.text = "２塁打！";
-                    if(runner[2] && runner[1])
-                    {
-                        score += 2;
-                    }else if(runner[1] || runner[2]){
-                        score += 1;
-                    }
-                    runner[2] = runner[0];
-                    runner[1] = true;
-                    runner[0] = false;
-                    if ((time - limit_succesTime + successtime) < successtime)
-                    {
-                        ball.GetComponent<Rigidbody>().velocity = (hitdest.transform.position - destposition) - new Vector3(0, 10, 15);
-                    }
-                    else
-                    {
-                        ball.GetComponent<Rigidbody>().velocity = (hitdest_right.transform.position - destposition) - new Vector3(0, 10, 15);
-                    }
-                }
-                else if (mors == "superstrong")
-                {
-                    result.text = "ホームラン！";
-                    int count = 0;
-                    for(int i = 0; i < 3; i++)
-                    {
-                        if (runner[i])
+                        result.text = "ヒット！";
+                        if (runner[2])
                         {
-                            count++;
-                            runner[i] = false;
+                            score += 1;
+                        }
+                        runner[2] = runner[1];
+                        runner[1] = runner[0];
+                        runner[0] = true;
+                        GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>().PlayOneShot(utta);
+                        if ((time - limit_succesTime + successtime) < successtime + 0.03f)
+                        {
+                            ball.GetComponent<Rigidbody>().velocity = (hitdest.transform.position - destposition) - new Vector3(0, 15, 15);
+                        }
+                        else
+                        {
+                            ball.GetComponent<Rigidbody>().velocity = (hitdest_right.transform.position - destposition) - new Vector3(0, 15, 15);
+                        }
+                    
+                    }
+                    else if (mors == "strong")
+                    {
+                        result.text = "２塁打！";
+                        GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>().PlayOneShot(utta);
+                        if (runner[2] && runner[1])
+                        {
+                            score += 2;
+                        }else if(runner[1] || runner[2]){
+                            score += 1;
+                        }
+                        runner[2] = runner[0];
+                        runner[1] = true;
+                        runner[0] = false;
+                        if ((time - limit_succesTime + successtime) < successtime + 0.02f)
+                        {
+                            ball.GetComponent<Rigidbody>().velocity = (hitdest.transform.position - destposition) - new Vector3(0, 10, 15);
+                        }
+                        else
+                        {
+                            ball.GetComponent<Rigidbody>().velocity = (hitdest_right.transform.position - destposition) - new Vector3(0, 10, 15);
                         }
                     }
-                    score += count + 1;
-                    if ((time - limit_succesTime + successtime) < successtime)
+                    else if (mors == "superstrong")
                     {
-                        ball.GetComponent<Rigidbody>().velocity = (hitdest.transform.position - destposition);
+                        result.text = "ホームラン！";
+                        int count = 0;
+                        for(int i = 0; i < 3; i++)
+                        {
+                            if (runner[i])
+                            {
+                                count++;
+                                runner[i] = false;
+                            }
+                        }
+                        score += count + 1;
+                        if ((time - limit_succesTime + successtime) < successtime + 0.01f)
+                        {
+                            ball.GetComponent<Rigidbody>().velocity = (hitdest.transform.position - destposition);
+                            GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>().PlayOneShot(monkuHome);
+                        }
+                        else
+                        {
+                            ball.GetComponent<Rigidbody>().velocity = (hitdest_right.transform.position - destposition);
+                            GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>().PlayOneShot(rightHome);
+                        }
                     }
                     else
                     {
-                        ball.GetComponent<Rigidbody>().velocity = (hitdest_right.transform.position - destposition);
+                        result.text = "エラーです。\n店員をよんでください。";
                     }
+                    ball.GetComponent<Rigidbody>().useGravity = true;
+                    hit = true;
                 }
                 else
                 {
-                    result.text = "エラーです。\n店員をよんでください。";
+                    GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>().PlayOneShot(choicekaraburi);
+                    result.text = "残念、、三振、、、";
+                    outcount++;
+                    if(outcount == 3)
+                    {
+                        Invoke("LoadResult", 1.0f);
+                    }
                 }
-                ball.GetComponent<Rigidbody>().useGravity = true;
-                hit = true;
-            }
-            else
+            }else
             {
-                GameObject.Instantiate(audio_res, transform.position, Quaternion.identity).GetComponent<AudioSource>().PlayOneShot(choicekaraburi);
-                result.text = "残念、、三振、、、";
-                outcount++;
-                if(outcount == 3)
-                {
-                    Invoke("LoadResult", 1.0f);
-                }
+
             }
+                
 
             if (mode_stopwatch)
             {
@@ -225,11 +251,13 @@ public class stopwatch : MonoBehaviour
 
     public void startbotton()
     {
-        Debug.Log(select.score_select);
         if(botton_bool == false)
         {
             flag = true;
+            start_text.text = "start!!";
             botton_text.text = "stop";
+            carsol_text1.text = "";
+            carsol_text2.text = "";
         } 
 
     }
