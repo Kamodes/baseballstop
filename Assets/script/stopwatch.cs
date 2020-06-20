@@ -46,6 +46,7 @@ public class stopwatch : MonoBehaviour
     private bool mode_stopwatch = ModeManager.mode;
     private bool carsol = false;
     private Vector3 carsolposition;
+    private bool timeflag;
     // Start is called before the first frame update
     void Start()
     {
@@ -69,6 +70,7 @@ public class stopwatch : MonoBehaviour
         carsolposition = new Vector3(0.1f, 0.8f, -8.0f);
         GameObject carsol_res = (GameObject)Resources.Load("carsol");
         GameObject.Instantiate(carsol_res, carsolposition, Quaternion.identity);
+        timeflag = true;
     }
 
     // Update is called once per frame
@@ -109,7 +111,15 @@ public class stopwatch : MonoBehaviour
         }
         else
         {
-            timelimit_text.text = "HardMode!!!\n得点２倍!!!";
+           if(time < 2.5f)
+            {
+                timelimit_text.text = "HardMode!!得点２倍！\n" + time.ToString();
+            }
+            else if (timeflag)
+            {
+                timelimit_text.text = "HardMode!!得点２倍！";
+            }
+
         }
 
         if((time > limit_succesTime - desttime) && (hit == false))
@@ -129,7 +139,9 @@ public class stopwatch : MonoBehaviour
         if (botton_bool == true){
             GameObject audio_res = (GameObject)Resources.Load("MusicManager");
             flag = false;
+            timeflag = false;
             start_text.text = "";
+            timelimit_text.text = "HardMode!!得点２倍！\n" + time.ToString();
             if (carsol == false)
             {
                 if ((limit_succesTime - successtime) < time && (limit_succesTime + successtime) > time)
